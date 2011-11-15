@@ -30,6 +30,9 @@ import schema
 
 OPENPROXIMITY_CONFIG_FILE=os.environ.get('OPENPROXIMITY_CONFIG_FILE', 
                                          "/etc/openproximity2.conf")
+if not os.access(OPENPROXIMITY_CONFIG_FILE, os.W_OK):
+    OPENPROXIMITY_CONFIG_FILE=os.path.expanduser("~/.openproximity.conf")
+
 
 # parse config files
 parser=SchemaConfigParser(schema.OpenProximitySchema())
@@ -69,3 +72,4 @@ def setmode(self, mode):
         self.schema._sections.pop(i)
 
 parser.setmode=partial(setmode, parser)
+sys.modules['preset'] = sys.modules[__name__]
