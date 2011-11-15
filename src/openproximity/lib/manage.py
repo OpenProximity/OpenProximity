@@ -35,6 +35,10 @@ setup_environ(settings)
 from net.aircable.openproximity.pluginsystem import pluginsystem
 pluginsystem.post_environ()
 
-if __name__ == "__main__":
+def main():
     from django.conf import settings as set
     execute_from_command_line()
+
+
+if __name__ == "__main__":
+    main()

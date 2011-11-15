@@ -48,7 +48,7 @@ setup(name = "OpenProximity",
       zip_safe = True,
       entry_points = {
         'console_scripts': [
-            'OpenProximity-manage = openproximity.lib.manage:setup',
+            'OpenProximity-manage = openproximity.lib.manage:main',
             ],
         },
 )
