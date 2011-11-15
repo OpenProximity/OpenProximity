@@ -33,7 +33,7 @@ for k in dir(plug):
     parser.set('django', k.lower(), orig)
 
 # make sure we don't get loaded again!
-sys.modules['django-web.settings'] = sys.modules['settings']
+sys.modules['django-web.settings'] = sys.modules[__name__]
 
 def __get_match_dongle(options, address):
     def __parse(option, typ=int):
