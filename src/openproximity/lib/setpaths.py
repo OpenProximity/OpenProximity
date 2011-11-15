@@ -21,8 +21,6 @@ DJANGO_PATH=os.path.dirname(os.path.realpath(__file__))
 OP_PATH=os.path.dirname(DJANGO_PATH)
 
 paths = list()
-paths.append(os.path.join(OP_PATH, "libs"))
-paths.append(os.path.join(OP_PATH, "django-web"))
 paths.append(os.path.join("usr", "lib", "openproximity"))
 paths.append(os.path.expanduser(os.path.join('~', '.openproximity')))
 
@@ -37,7 +35,7 @@ for p in list(paths):
 sys.path = paths + sys.path
 
 try:
-    from openproximity import version
+    from openproximity import __version__ as version
 except:
     version = 'ND'
 os.environ['OP2_VERSION'] = version
