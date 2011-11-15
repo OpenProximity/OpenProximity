@@ -1,0 +1,2 @@
+recursive-include src/openproximity/lib/ *.cfg
+recursive-include src/locale/ *.po *.mo
