@@ -19,7 +19,7 @@ from openproximity.models import *
 from random import random
 from re import compile
 from rpyc import async
-from rpyc.utils.lib import ByValWrapper
+from rpyc.lib.compat import ByValWrapper
 from net.aircable.openproximity.pluginsystem import pluginsystem
 from net.aircable.utils import trace
 import traceback, sys
