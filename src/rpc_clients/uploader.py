@@ -23,7 +23,7 @@ import net.aircable.sdp as sdp
 from net.aircable.openproximity.signals.uploader import *
 from net.aircable.utils import *
 from net.aircable.wrappers import Adapter
-from rpyc.utils.lib import ByValWrapper
+from rpyc.lib.compat import ByValWrapper
 from functools import partial
 from agent import Agent, PATH
 import async

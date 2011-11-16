@@ -18,7 +18,7 @@ from net.aircable.utils import getLogger
 logger = getLogger(__name__)
 from net.aircable.openproximity.signals.scanner import *
 from net.aircable.wrappers import Adapter
-from rpyc.utils.lib import ByValWrapper
+from rpyc.lib.compat import ByValWrapper
 from django.utils.encoding import smart_str
 
 import net.aircable.const as const

@@ -81,7 +81,7 @@ def handle_adapter_added_or_removed(path, signal):
     logger.info("bluez.%s: %s" % (signal, path))
     stop()
 
-def init():
+def init(mode):
     '''
     Gets called from inside the gobject loop once dbus is accessible so we can
     complete the init process.
@@ -90,8 +90,6 @@ def init():
     
     logger.info("init")
     
-    type__ = sys.argv[3].lower()
-
     # get the list of connected dongles
     a=list()
     for b in manager.manager.ListAdapters():
@@ -102,9 +100,9 @@ def init():
 
     # do the remote registration.
     register={
-	'scanner': async(server.root.scanner_register),
-	'uploader': async(server.root.uploader_register),
-    }.get(type__, async(server.root.generic_register))
+        'scanner': async(server.root.scanner_register),
+        'uploader': async(server.root.uploader_register),
+    }.get(mode, async(server.root.generic_register))
 
     register(
         remote_quit=stop, 
@@ -118,10 +116,10 @@ def init():
 
     return False
 
-def run(server_, port, type_):
+def run(host, port mode):
     '''
-	Will get called from a child process once the autoreload system is ready
-	everything will be setup so the rpc client can work.
+    Will get called from a child process once the autoreload system is ready
+    everything will be setup so the rpc client can work.
     '''
     global server, manager, bus, loop
     
@@ -129,7 +127,7 @@ def run(server_, port, type_):
     
     # first connect to the server, we can't do much without it
     try:
-        server = rpyc.connect(server_, int(port))
+        server = rpyc.connect(host, int(port))
     except:
         import time
         logger.info("server is not running")
@@ -167,17 +165,17 @@ def run(server_, port, type_):
 
     # create the manager and register for init
     try:
-        if type_ == 'scanner':
+        if mode == 'scanner':
             from scanner import ScanManager
             logger.info("init scanner")
             manager = ScanManager(bus, rpc=server)
-        elif type_ == 'uploader':
+        elif mode == 'uploader':
             logger.info("init uploader")
             from uploader import UploadManager
             manager = UploadManager(bus, rpc=server, loop=loop)
         else:
             for i in pluginsystem.get_plugins('serverxr'):
-                if type_==i.provides['serverxr_type']:
+                if mode==i.provides['serverxr_type']:
                     logger.info("init %s" % i.provides['serverxr_type'])
                     module = __import__("%s.serverxr" % i.name, 
                                         fromlist=[
@@ -187,7 +185,7 @@ def run(server_, port, type_):
                     break
         if manager is None:
             raise Exception ("Not valid type")
-        gobject.timeout_add(100, init) 
+        gobject.timeout_add(100, init, mode) 
         # delay initialization 'til loop is running
     except dbus.DBusException, err:
         logger.info("bluez isn't ready, delaying init")
