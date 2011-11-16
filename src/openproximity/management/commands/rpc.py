@@ -27,6 +27,8 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         from django.conf import settings
         from django.utils import translation
+        from net.aircable import utils
+        utils.log_setup(settings, True)
         runserver(args)
 
     def usage(self, subcommand):

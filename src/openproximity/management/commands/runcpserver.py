@@ -46,3 +46,9 @@ class Command(OCommand):
         
     def usage(self, subcommand):
         return ""
+
+    def handle(self, *args, **options):
+        from django.conf import settings
+        from net.aircable import utils
+        utils.log_setup(settings, True)
+        OCommand.handle(self, *args, **options)

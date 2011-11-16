@@ -19,6 +19,9 @@ class Command(BaseCommand):
     help = "RPyC Client for OpenProximity."
 
     def handle(self, *args, **options):
+        from django.conf import settings
+        from net.aircable import utils
+        utils.log_setup(settings, True)
         runclient(args)
 
     def usage(self, subcommand):
