@@ -116,10 +116,10 @@ def init(mode):
 
     return False
 
-def run(host, port mode):
+def run(host, port, mode):
     '''
-    Will get called from a child process once the autoreload system is ready
-    everything will be setup so the rpc client can work.
+        Will get called from a child process once the autoreload system is ready
+        everything will be setup so the rpc client can work.
     '''
     global server, manager, bus, loop
     
@@ -175,7 +175,7 @@ def run(host, port mode):
             manager = UploadManager(bus, rpc=server, loop=loop)
         else:
             for i in pluginsystem.get_plugins('serverxr'):
-                if mode==i.provides['serverxr_type']:
+                if mode == i.provides['serverxr_type']:
                     logger.info("init %s" % i.provides['serverxr_type'])
                     module = __import__("%s.serverxr" % i.name, 
                                         fromlist=[
