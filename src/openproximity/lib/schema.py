@@ -40,21 +40,21 @@ class OpenProximitySchema(Django13Schema):
     # openproximity general settings
     ################################################
     openproximity = Section('openproximity')
-    openproximity.aircable_path = StringOption( default='/tmp/aircable',
+    openproximity.store_path = StringOption( default='/var/lib/openproximity',
         help = 'Path were we store the database file (if using sqlite) and storing files for campaigns etc')
-    openproximity.op2_debug = BoolOption(default=True,
+    openproximity.op_debug = BoolOption(default=True,
         help = 'Disable if you want to hide the "Databrowse" tab')
-    openproximity.op2_translate = BoolOption(default=True,
+    openproximity.op_translate = BoolOption(default=True,
         help = 'Disable if you want to hide the "Translate" tab')
-    openproximity.op2_twitter = BoolOption(default=True,
+    openproximity.op_twitter = BoolOption(default=True,
         help = 'Disable if you want to hide the Twitter news client')
-    openproximity.op2_logo = StringOption(default='logo.gif',
+    openproximity.op_logo = StringOption(default='logo.gif',
         help = 'Logo to display instead of AIRcable logo')
-    openproximity.op2_plugins = DictOption(item=BoolOption(),
+    openproximity.op_plugins = DictOption(item=BoolOption(),
         help="""A list of plugins name with they're enable/disable state overrides plugins defaults)""")
-    openproximity.op2_scanners = ListOption( item=TupleOption(4),
+    openproximity.op_scanners = ListOption( item=TupleOption(4),
         help="""A list of ([MAC filter], scanner priority) for dongle configuration on initial discovery""")
-    openproximity.op2_uploaders = ListOption( item=TupleOption(4),
+    openproximity.op_uploaders = ListOption( item=TupleOption(4),
         help="""A list of ([MAC filter], max connections) for dongle configuration on initial discovery""")
 
     ################################################
