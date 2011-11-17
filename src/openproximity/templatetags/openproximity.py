@@ -27,10 +27,10 @@ def do_settings(parser, token):
 class SettingsNode(template.Node):
     def render(self, context):
         context['settings'] = {
-            'logo': settings.OP2_LOGO,
-            'debug': settings.OP2_DEBUG,
-            'translate': settings.OP2_TRANSLATE,
-            'twitter': settings.OP2_TWITTER,
+            'logo': settings.OP_LOGO,
+            'debug': settings.OP_DEBUG,
+            'translate': settings.OP_TRANSLATE,
+            'twitter': settings.OP_TWITTER,
         }
         return ''
 
