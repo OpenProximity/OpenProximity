@@ -59,7 +59,7 @@ def generate_arguments(*args, **kwargs):
     out.extend(['-S', '-T', kwargs['timeout'], '-b', kwargs['target'], 
         '-B', kwargs['channel']])
     for f in kwargs['files']:
-        out.extend(['-p', f])
+        out.extend(['-p', '"%s"' % f])
     return [ str(x) for x in out ]
 
 class ServiceNotProvided(Exception):
@@ -256,7 +256,7 @@ class UploadTarget(object):
             "NoInputNoOutput",
             reply_handler=self.create_paired_device_cb, 
             error_handler=self.create_paired_device_err,
-            timeout=3000 # so we don't get timeouts so soon!
+            timeout=6000 # so we don't get timeouts so soon!
         )
     
     def create_paired_device_cb(self, *args, **kwargs):
