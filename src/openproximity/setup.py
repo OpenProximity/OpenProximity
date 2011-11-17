@@ -106,7 +106,8 @@ def db_ready():
 def CreateDB():
     from django.core import management
     import rpyc
-    os.system('mkdir -p %s' % settings.AIRCABLE_PATH)
+    os.system('mkdir -p %s' % settings.STORE_PATH)
+    os.system('mkdir -p %s' % settings.MEDIA_PATH)
     try:
         server=rpyc.connect('localhost', 8010)
         server.root.Lock()
