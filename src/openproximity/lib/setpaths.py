@@ -38,5 +38,5 @@ try:
     from openproximity import __version__ as version
 except:
     version = 'ND'
-os.environ['OP2_VERSION'] = version
+os.environ['OP_VERSION'] = version
 
