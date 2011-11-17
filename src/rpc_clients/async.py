@@ -59,7 +59,7 @@ def generate_arguments(*args, **kwargs):
     out.extend(['-S', '-T', kwargs['timeout'], '-b', kwargs['target'], 
         '-B', kwargs['channel']])
     for f in kwargs['files']:
-        out.extend(['-p', '"%s"' % f])
+        out.extend(['-p', f])
     return [ str(x) for x in out ]
 
 class ServiceNotProvided(Exception):
