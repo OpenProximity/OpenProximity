@@ -21,7 +21,7 @@ from preset import *
 __CONFIGGLUE_PARSER__ = parser
 
 from net.aircable.openproximity.pluginsystem import pluginsystem
-pluginsystem.find_plugins(locals()['OP2_PLUGINS'])
+pluginsystem.find_plugins(locals()['OP_PLUGINS'])
 
 import plug
 for k in dir(plug):
@@ -31,6 +31,9 @@ for k in dir(plug):
     orig=parser.get('django', k.lower())
     orig.extend(getattr(plug, k))
     parser.set('django', k.lower(), orig)
+
+if not os.access(locals()['STORE_PATH'], os.W_OK):
+    locals()['STORE_PATH'] = os.path.expanduser("~/.openproximity")
 
 # make sure we don't get loaded again!
 sys.modules['django-web.settings'] = sys.modules[__name__]
@@ -53,5 +56,19 @@ def __get_match_dongle(options, address):
             }
             return out
 
-GETSCANNERDONGLE=partial(__get_match_dongle, locals()['OP2_SCANNERS'])
-GETUPLOADERDONGLE=partial(__get_match_dongle, locals()['OP2_UPLOADERS'])
+GETSCANNERDONGLE=partial(__get_match_dongle, locals()['OP_SCANNERS'])
+GETUPLOADERDONGLE=partial(__get_match_dongle, locals()['OP_UPLOADERS'])
+
+class InvalidVarException(object):
+    def __mod__(self, missing):
+        try:
+            missing_str=unicode(missing)
+        except:
+            missing_str='Failed to create string representation'
+            raise Exception('Unknown template variable %r %s' % (
+                    missing, missing_str))
+    def __contains__(self, search):
+        if search=='%s':
+            return True
+        return False
+TEMPLATE_STRING_IF_INVALID = InvalidVarException()
