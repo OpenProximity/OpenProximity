@@ -29,7 +29,7 @@ from functools import partial
 import schema
 
 OPENPROXIMITY_CONFIG_FILE=os.environ.get('OPENPROXIMITY_CONFIG_FILE', 
-                                         "/etc/openproximity2.conf")
+                                         "/etc/openproximity.conf")
 if not os.access(OPENPROXIMITY_CONFIG_FILE, os.W_OK):
     OPENPROXIMITY_CONFIG_FILE=os.path.expanduser("~/.openproximity.conf")
 
