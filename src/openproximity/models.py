@@ -298,14 +298,14 @@ class MarketingCampaign(Campaign):
         again or not on this device.
         '''
         pair_tries = RemoteBluetoothDevicePairing.objects.filter(
-            remote=remote.address).order_by('-time')[:1]
+            remote=remote).order_by('-time')[:1]
         file_tries = RemoteBluetoothDeviceFilesRejected.objects.filter(
             campaign=self, remote=remote).order_by('-time')[:1]
         if pair_tries.count() == 0 and files_tries.count() == 0:
             return None
         if pair_tries.count() == 0:
             return files_tries[0]
-        if files_tries.count() == 0:
+        if file_tries.count() == 0:
             return pair_tries[0]
         
         # we want to return the oldest record
@@ -667,7 +667,7 @@ class RemoteBluetoothDevicePairing(RemoteBluetoothDeviceRecord):
     @classmethod
     def isPaired(klass, remote):
         logger.debug("isPaired %s" % remote )
-        klass.__count(remote, klass.PAIRED).count() > 0
+        return klass.__count(remote, klass.PAIRED).count() > 0
     
     @classmethod
     def rejectedCount(klass, remote):
