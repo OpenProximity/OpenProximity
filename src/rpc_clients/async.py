@@ -248,25 +248,30 @@ class UploadTarget(object):
         self.CreatePairedDevice(address, agent)
 
     def CreatePairedDevice(self, target, agent):
-        logger.debug("createPairedDevice")
+        logger.debug("createPairedDevice for path %s" % agent.path)
         self.state = PAIR_IN_PROGRESS
         self.dongle.CreatePairedDevice(
             target,
-            agent,
-            "NoInputNoOutput",
+            agent.path,
+            "DisplayYesNo",
             reply_handler=self.create_paired_device_cb, 
             error_handler=self.create_paired_device_err,
             timeout=6000 # so we don't get timeouts so soon!
         )
+        self.agent = agent
     
     def create_paired_device_cb(self, *args, **kwargs):
         logger.debug("create_paired_device_cb %s %s" % (args, kwargs))
         self.state = IDLE
         self.reply_callback(target=self)
+        self.agent.release()
+        del self.agent
 
     def create_paired_device_err(self, reason):
         logger.debug("create_paired_device_err %s %s" % (reason, type(reason)))
         self.state = IDLE
+        self.agent.release()
+        del self.agent
         if reason.get_dbus_name().find('AlreadyExists')>-1:
             self.reply_callback(target=self)
         else:
