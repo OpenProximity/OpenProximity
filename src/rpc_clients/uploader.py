@@ -76,7 +76,8 @@ class UploadAdapter(Adapter):
         self.loop = loop
         self.hci_path = self.dbus_path.split("/")[-1]
         for i in range(0, max_uploads):
-            Agent(self.bus, self.hci_path)
+            Agent(bus=self.bus, dongle=self.hci_path, 
+                rpc_server=self.manager.rpc)
         logger.debug("Initializated UploaderDongle")
 
     def completed(self, target):
@@ -233,7 +234,7 @@ class UploadAdapter(Adapter):
             logger.debug("pairing to address %s", address)
             agent = Agent.getAgent(self.hci_path)
             target.PairDevice(address, 
-                              agent.path,
+                              agent,
                               self.pairSuccess, 
                               self.pairFailed)
         except Exception, err:
