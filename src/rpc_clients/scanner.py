@@ -53,12 +53,12 @@ class ScanAdapter(Adapter):
             return True
         prop = self.dbus_interface.GetProperties()
         if "Discovering" in prop and not prop["Discovering"]:
-            print "Not discovering!"
+            logger.debug("not discovering!")
             return start_over()
         elif "Discovering" not in prop:
-            print "Discovering not in list"
+            logger.debug("discovery not in properties")
             return start_over()
-        print "is doing discvory yippie"
+        logger.debug("inquiry started correctly")
         return False
     
     def scan(self):
