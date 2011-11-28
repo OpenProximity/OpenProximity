@@ -46,13 +46,29 @@ class ScanAdapter(Adapter):
     def __str__(self):
         return '%s, %s' % (Adapter.__str__(self), self.priority)
     
+    def check_scan(self):
+        def start_over():
+            self.dbus_interface.StopDiscovery()
+            self.dbus_interface.StartDiscovery()
+            return True
+        prop = self.dbus_interface.GetProperties()
+        if "Discovering" in prop and not prop["Discovering"]:
+            print "Not discovering!"
+            return start_over()
+        elif "Discovering" not in prop:
+            print "Discovering not in list"
+            return start_over()
+        print "is doing discvory yippie"
+        return False
+    
     def scan(self):
         '''
         Call this function to start a scan process on this dongle
         '''
         self.found = dict()
         self.dbus_interface.StartDiscovery()
-        
+        gobject.timeout_add(1000, self.check_scan)
+
     def endScan(self):
         '''
         Force ongoing inquiry to stop
@@ -460,12 +476,12 @@ class ScanManager:
             dongle.found[address] = dict()
             dongle.found[address]['rssi'] = list()
             dongle.found[address]['time'] = list()
-            
+
         if 'name' not in dongle.found[address] and 'Name' in values:
             dongle.found[address]['name']=smart_str(values['Name'])
         if  'devclass' not in dongle.found[address] and 'Class' in values:
             dongle.found[address]['devclass'] = int(values['Class'])
-        
+
         dongle.found[address]['rssi'].append(int(values['RSSI']))
         dongle.found[address]['time'].append(time.time())
         logger.debug(
@@ -481,6 +497,7 @@ class ScanManager:
         Callback that will let us know when a scan cycle has been completed,
         or started.
         '''
+        logger.debug("property_changed %s %s %s", name, value, path)
         if self.__index == None:
             return
         if name=='Discovering':
