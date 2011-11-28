@@ -141,9 +141,9 @@ def found_action_upload(remote, record = None, line=None):
 
     logger.info("going to upload %s files" % len(files))
     if len(files) > 0:
-        OpenProximityService.addPending(record.remote.address, uploader)
         do_upload(uploader, files, record.remote.address, service, name, 
                 channel=channel, dongle=dongle if use_same else None)
+        OpenProximityService.addPending(record.remote.address, uploader)
         line.content+=" uploading files"
     else:
         line.content+=" no files to upload"
