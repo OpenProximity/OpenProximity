@@ -28,7 +28,7 @@ import rpyc
 from net.aircable.utils import getLogger
 logger = getLogger(__name__)
 
-PATH="/net/aircable/agent"
+PATH="/openproximity/agent/%i" % os.getpid()
 # Path where we register our pairing agent.
 
 bus = dbus.SystemBus()
@@ -47,6 +47,8 @@ class Agent(dbus.service.Object):
     '''
 
     AGENTS = dict()
+    def release(self):
+        self.busy = False
 
     @classmethod
     def getAgent(klass, dongle):
@@ -61,16 +63,16 @@ class Agent(dbus.service.Object):
                 return agent
         raise Exception("No agents are available")
 
-    def __init__(self, rpc_server, dongle, *a, **kw):
+    def __init__(self, bus, dongle, rpc_server):
         self.rpc_server = rpc_server
-        dbus.service.Object.__init__(self, *a, **kw)
         if not dongle in Agent.AGENTS:
-            Agent.AGENTS[dongle]=list()
+            Agent.AGENTS[dongle]=[]
         self.index=len(Agent.AGENTS[dongle])
         Agent.AGENTS[dongle].append(self)
-        self.path="%s/%s/%i" % (PATH, dongle, self.index)
+        self.path="%s_%s_%i" % (PATH, dongle, self.index)
         logger.info("Started agent for path %s" % self.path)
         self.busy = False
+        dbus.service.Object.__init__(self, bus, self.path)
 
     @dbus.service.method("org.bluez.Agent", in_signature="", out_signature="")
     def Release(self):
