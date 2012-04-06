@@ -31,6 +31,7 @@ REQUIRES=[
     'django-restapi-op',
     'poster',
     'django-timezones-op',
+    'pytz'
 ]
 
 setup(name = "OpenProximity",
