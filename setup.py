@@ -14,6 +14,7 @@ REQUIRES=[
     'lxml',
     #'dbus-python',
     'django>=1.3',
+    'django<1.4',
     'openproximity-external-media',
     'wadofstuff-django-serializers-op',
     'PyOFC2-op',
