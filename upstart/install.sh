@@ -9,8 +9,8 @@ URL="https://raw.github.com/OpenProximity/OpenProximity/master/"
 RPATH="/opt/openproximity"
 OPATH="${1}"
 
-OPATH="echo ${OPATH} | sed -e 's/\//\\\//g'"
-RPATH="echo ${RPATH} | sed -e 's/\//\\\//g'"
+OPATH=$(echo ${OPATH} | sed -e 's/\//\\\//g')
+RPATH=$(echo ${RPATH} | sed -e 's/\//\\\//g')
 
 cd /etc/init
 wget ${URL}/upstart/bluetoothd.conf
