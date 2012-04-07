@@ -46,9 +46,21 @@ class Agent(dbus.service.Object):
     Documentation for the methods come from BlueZ docs.
     '''
 
-    AGENTS = dict()
+    busy = False
+    watchdog = None
+
     def release(self):
+        if self.watchdog:
+            try:
+                self.adapter.UnregisterAgent(self.path)
+            except Exception, err:
+                logger.exception(err)
+        self.watchdog = None
         self.busy = False
+        return False
+
+    def lock(self):
+        self.busy = True
 
     @classmethod
     def getAgent(klass, dongle):
@@ -58,7 +70,7 @@ class Agent(dbus.service.Object):
 
         for agent in klass.AGENTS[dongle]:
             if not agent.busy:
-                agent.busy = True
+                agent.lock()
                 logger.info("Going to use %s" % agent.path)
                 return agent
         raise Exception("No agents are available")
@@ -69,6 +81,7 @@ class Agent(dbus.service.Object):
             Agent.AGENTS[dongle]=[]
         self.index=len(Agent.AGENTS[dongle])
         Agent.AGENTS[dongle].append(self)
+        self.adapter = dongle
         self.path="%s_%s_%i" % (PATH, dongle, self.index)
         logger.info("Started agent for path %s" % self.path)
         self.busy = False
@@ -185,3 +198,5 @@ class Agent(dbus.service.Object):
         before a reply was returned.
         '''
         logger.info("Cancel")
+
+Agent.AGENTS = dict()
