@@ -29,6 +29,7 @@ sed -i "s/${RPATH}/${OPATH}/g" openproximity-rpc-scanner.conf
 sed -i "s/${RPATH}/${OPATH}/g" openproximity-rpc-uploader.conf
 
 sudo cp *.conf /etc/init/
+sudo mkdir -p /var/log/openproximity
 
 popd
 
