@@ -12,7 +12,9 @@ OPATH="${1}"
 OPATH=$(echo ${OPATH} | sed -e 's/\//\\\//g')
 RPATH=$(echo ${RPATH} | sed -e 's/\//\\\//g')
 
-cd /etc/init
+TDIR=$(mktemp)
+
+pushd $TDIR
 wget ${URL}/upstart/bluetoothd.conf
 wget ${URL}/upstart/openproximity-web.conf
 wget ${URL}/upstart/openproximity-rpc.conf
@@ -22,3 +24,7 @@ sed -i "s/${RPATH}/${OPATH}/g" openproximity-web.conf
 sed -i "s/${RPATH}/${OPATH}/g" openproximity-rpc.conf
 sed -i "s/${RPATH}/${OPATH}/g" openproximity-rpc-scanner.conf
 sed -i "s/${RPATH}/${OPATH}/g" openproximity-rpc-uploader.conf
+
+sudo cp *.conf /etc/init/
+
+popd
